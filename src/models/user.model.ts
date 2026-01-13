@@ -1,18 +1,17 @@
-import mongoose, { Schema, models } from "mongoose";
-import { Role } from "../interfaces/roles.interface";
+import { Schema, model, models } from "mongoose";
+import { IUser } from "../interfaces/user.interface"; 
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
-    name: { type: String },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     identification: { type: String, required: true },
     id_no: { type: Number, required: true },
-    booking: { type: String, reuired: false },
+    booking: { type: String, required: false }, // fixed typo here
     role: {
       type: String,
       enum: ["USER", "HOTEL", "ADMIN", "SUPER_ADMIN"],
-      default: "USER",
+      default: "USER" ,
     },
     isVerified: { type: Boolean, default: false },
     emailToken: { type: String },
@@ -20,4 +19,18 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-export default models.User || mongoose.model("User", UserSchema);
+export const User = models.User || model<IUser>("User", UserSchema);
+
+// export interface IUser {
+//   email: string;
+//   password: string;
+//   identification: string; // <-- Add this line
+//   id_no: number;
+//   booking?: string;
+//   role?: "USER" | "HOTEL" | "ADMIN" | "SUPER_ADMIN";
+//   isVerified?: boolean;
+//   emailToken?: string;
+//   // ...other properties...
+// }
+
+// export default models.User || mongoose.model("User", UserSchema);

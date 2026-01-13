@@ -1,9 +1,24 @@
-import User from "../models/user.model";
+import { Schema, model, Document } from 'mongoose';
+import { User } from "../models/user.model";
 import jwt from "jsonwebtoken";
 import { hashPassword, comparePassword } from "../utils/password";
 import { generateJWT } from "../utils/jwt";
 import { generateEmailToken } from "../utils/token";
 import { sendVerificationEmail } from "./mail.service";
+
+interface IUser extends Document {
+  email: string;
+  emailToken?: string;
+  // ...other fields...
+}
+
+const UserSchema = new Schema<IUser>({
+  email: { type: String, required: true },
+  emailToken: { type: String },
+  // ...other fields...
+});
+
+export default model<IUser>('User', UserSchema);
 
 export const registerUser = async (data: any) => {
   const token = generateEmailToken();
@@ -14,6 +29,7 @@ export const registerUser = async (data: any) => {
     emailToken: token,
   });
 
+  if (!user) throw new Error("User registration failed");
   await sendVerificationEmail(user.email, token);
   return user;
 };

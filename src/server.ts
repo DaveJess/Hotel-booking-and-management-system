@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import connectToDatabase from "./database/db";
 import app from "./app";
+import mongoose from "mongoose";
 
 dotenv.config();
 

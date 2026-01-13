@@ -10,34 +10,35 @@ export const createReservation = async (data: Partial<IReservation>) => {
 
 // Get a reservation by ID
 export const getReservationById = async (id: string) => {
-  return Reservation.findById(id).lean<IReservation>().exec();
+  return Reservation.findById(id).lean().exec();
 };
 
 // Update a reservation by ID
 export const updateReservation = async (id: string, update: Partial<IReservation>) => {
-  return Reservation.findByIdAndUpdate(id, update, { new: true }).lean<IReservation>().exec();
+  return Reservation.findByIdAndUpdate(id, update, { new: true }).lean().exec();
 };
 
 // Delete a reservation by ID
 export const deleteReservation = async (id: string) => {
-  return Reservation.findByIdAndDelete(id).lean<IReservation>().exec();
+  return Reservation.findByIdAndDelete(id).lean().exec();
 };
 
 // Get all reservations (with optional filters)
 export const getAllReservations = async (filters: FilterQuery<IReservation> = {}) => {
-  return Reservation.find(filters).lean<IReservation[]>().exec();
+  return Reservation.find(filters).lean().exec();
 };
 
 // Get reservations for a specific user
 export const getReservationsByUser = async (userId: string) => {
-  return Reservation.find({ user: userId }).lean<IReservation[]>().exec();
+  return Reservation.find({ user: userId }).lean().exec();
 };
 
 // Cancel a reservation (soft delete or status update)
 export const cancelReservation = async (id: string) => {
+  // If you use a status field for cancellation, update it here
   return Reservation.findByIdAndUpdate(
     id,
     { status: "CANCELLED" },
     { new: true }
-  ).lean<IReservation>().exec();
+  ).lean().exec();
 };

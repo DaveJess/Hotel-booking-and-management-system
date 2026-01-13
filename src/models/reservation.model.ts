@@ -1,12 +1,9 @@
 import mongoose, { Schema, models } from "mongoose";
 
+
 const ReservationSchema = new Schema(
   {
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    userId: { type: String, ref: "User", required: true },
     hotel: {
       type: Schema.Types.ObjectId,
       ref: "Hotel",
@@ -30,5 +27,5 @@ const ReservationSchema = new Schema(
   { timestamps: true }
 );
 
-export default models.Reservation ||
-  mongoose.model("Reservation", ReservationSchema);
+export const Reservation =
+  models.Reservation || mongoose.model("Reservation", ReservationSchema);
