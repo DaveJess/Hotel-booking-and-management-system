@@ -13,6 +13,11 @@ const BookingSchema = new Schema(
       enum: ["PENDING", "CONFIRMED", "CANCELLED"],
       default: "PENDING",
     },
+    status: {
+      type: String,
+      enum: ["PENDING", "CONFIRMED", "CANCELLED"],
+      default: "PENDING",
+    },
   },
   { timestamps: true }
 );

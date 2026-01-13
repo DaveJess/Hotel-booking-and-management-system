@@ -18,3 +18,4 @@ export const sendVerificationEmail = async (email: string, token: string) => {
            Verify Account</a>`,
   });
 };
+

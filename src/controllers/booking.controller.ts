@@ -1,52 +1,15 @@
 import { Request, Response } from "express";
+import { AuthRequest } from "../middleware/auth.middleware";
 import { Booking } from "../models/booking.model";
 import { Room } from "../models/room.model";
 import { isRoomAvailable } from "../service/booking/booking.service";
-
-
-// export const createBooking = async (req: Request, res: Response) => {
-//   const { roomId, checkIn, checkOut } = req.body;
-//   const userId = req.user!.id;
-
-//   const room = await Room.findById(roomId).populate("hotel");
-//   if (!room) return res.status(404).json({ message: "Room not found" });
-
-//   const available = await isRoomAvailable(
-//     roomId,
-//     new Date(checkIn),
-//     new Date(checkOut)
-//   );
-
-//   if (!available) {
-//     return res.status(400).json({ message: "Room not available" });
-//   }
-
-//   const days =
-//     (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
-//     (1000 * 60 * 60 * 24);
-
-//   const totalAmount = days * room.price;
-
-//   const booking = await Booking.create({
-//     user: userId,
-//     hotel: room.hotel,
-//     room: roomId,
-//     checkIn,
-//     checkOut,
-//     totalAmount,
-//   });
-
-//   res.status(201).json(booking);
-// };
-
-// import { Request, Response } from "express";
 import * as BookingService from "../service/booking/booking.service";
 
-export const createBooking = async (req: Request, res: Response) => {
+export const createBooking = async (req: AuthRequest, res: Response) => {
   try {
     const booking = await BookingService.createBooking({
       ...req.body,
-      user: req.user.id, // from auth middleware
+      user: req.user?._id || req.user?.id,
     });
     res.status(201).json(booking);
   } catch (error: any) {
@@ -54,8 +17,12 @@ export const createBooking = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserBookings = async (req: Request, res: Response) => {
-  const bookings = await BookingService.getUserBookings(req.user.id);
+export const getUserBookings = async (req: AuthRequest, res: Response) => {
+  const userId = req.user?._id || req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+  const bookings = await BookingService.getUserBookings(userId);
   res.json(bookings);
 };
 

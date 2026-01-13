@@ -1,10 +1,10 @@
-import User from "../models/user.model";
+import { User } from "../models/user.model";
 import { hashPassword } from "../utils/password";
 import { Role } from "../interfaces/roles.interface";
 import "../database/db"; 
 
 (async () => {
-  const exists = await User.findOne({ role: Role.SUPER_ADMIN });
+  const exists = await (User as any).findOne({ role: Role.SUPER_ADMIN }).exec();
   if (exists) return console.log("Super admin exists");
 
   await User.create({

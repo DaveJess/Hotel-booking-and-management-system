@@ -1,13 +1,16 @@
 import { Schema, model, models } from "mongoose";
 import { IUser } from "../interfaces/user.interface"; 
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema(
   {
+    name: { type: String, required: false },
+    fullName: { type: String, required: false },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     identification: { type: String, required: true },
     id_no: { type: Number, required: true },
-    booking: { type: String, required: false }, // fixed typo here
+    nin: { type: String, required: false },
+    booking: { type: String, required: false },
     role: {
       type: String,
       enum: ["USER", "HOTEL", "ADMIN", "SUPER_ADMIN"],
@@ -19,7 +22,9 @@ const UserSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-export const User = models.User || model<IUser>("User", UserSchema);
+const User = models.User || model("User", UserSchema);
+export { User };
+export default User;
 
 // export interface IUser {
 //   email: string;

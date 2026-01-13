@@ -35,7 +35,7 @@ export const registerUser = async (data: any) => {
 };
 
 export const verifyEmail = async (token: string) => {
-  const user = await User.findOne({ emailToken: token });
+  const user = await (User as any).findOne({ emailToken: token }).exec();
   if (!user) throw new Error("Invalid token");
 
   user.isVerified = true;
@@ -45,7 +45,7 @@ export const verifyEmail = async (token: string) => {
 };
 
 export const loginUser = async (email: string, password: string) => {
-  const user = await User.findOne({ email });
+  const user = await (User as any).findOne({ email }).exec();
   if (!user) throw new Error("User not found");
   if (!user.isVerified) throw new Error("Email not verified");
 
